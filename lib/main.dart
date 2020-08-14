@@ -1,3 +1,8 @@
+import 'dart:io';
+
+import 'package:featureme_app/editor.dart';
+import 'package:featureme_app/scaffold.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -10,23 +15,35 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'FeatureMe',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.deepPurple,
+        accentColor: Colors.deepPurpleAccent,
+        brightness: Brightness.light,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHomePage(title: 'FeatureMe'),
+      home: HomePage(),
     );
   }
 }
 
-class MyHomePage extends StatelessWidget {
-  final String title;
-
-  MyHomePage({this.title});
-
+class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text(title)
+    return FeatureMeScaffold(
+      body: Center(
+        child: RaisedButton(
+          child: Text("Select audio file"),
+          onPressed: () async {
+            final File file = await FilePicker.getFile(type: FileType.audio);
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                builder: (context) => Editor(
+                  file: file,
+                ),
+              ),
+            );
+          },
+        ),
+      ),
     );
   }
 }
